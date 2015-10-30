@@ -1,0 +1,577 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="TradingDatabaseModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Address">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Line 1" Type="char" MaxLength="30" Nullable="false" />
+          <Property Name="Line 2" Type="char" MaxLength="30" />
+          <Property Name="Line 3" Type="char" MaxLength="30" />
+          <Property Name="City" Type="char" MaxLength="15" />
+          <Property Name="Country" Type="char" MaxLength="15" />
+          <Property Name="Postcode" Type="char" MaxLength="15" />
+        </EntityType>
+        <EntityType Name="Bond">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Instrument_ID" Type="int" />
+          <Property Name="Issuer" Type="int" />
+          <Property Name="Coupon" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="Issue_Year" Type="int" />
+          <Property Name="Issue_Month" Type="int" />
+          <Property Name="Duration" Type="int" />
+        </EntityType>
+        <EntityType Name="FRA">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Instrument_ID" Type="int" />
+          <Property Name="Rate" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="Duration" Type="int" />
+          <Property Name="Start_Month" Type="int" />
+          <Property Name="Start_Year" Type="int" />
+        </EntityType>
+        <EntityType Name="instrument">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ISIN" Type="char" MaxLength="30" />
+        </EntityType>
+        <EntityType Name="LegalEntity">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="char" MaxLength="30" />
+          <Property Name="Address_ID" Type="int" />
+        </EntityType>
+        <EntityType Name="Options">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Instrument_ID" Type="int" />
+          <Property Name="Underlying_Instrument" Type="int" />
+          <Property Name="Strike" Type="decimal" Precision="18" Scale="0" />
+        </EntityType>
+        <EntityType Name="Trade">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Party" Type="int" />
+          <Property Name="Counter_Party" Type="int" />
+          <Property Name="Instrument_ID" Type="int" />
+        </EntityType>
+        <Association Name="FK__Bond__Instrument__32E0915F">
+          <End Role="instrument" Type="Self.instrument" Multiplicity="0..1" />
+          <End Role="Bond" Type="Self.Bond" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="instrument">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Bond">
+              <PropertyRef Name="Instrument_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Bond__Issuer__33D4B598">
+          <End Role="LegalEntity" Type="Self.LegalEntity" Multiplicity="0..1" />
+          <End Role="Bond" Type="Self.Bond" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LegalEntity">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Bond">
+              <PropertyRef Name="Issuer" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__FRA__Instrument___36B12243">
+          <End Role="instrument" Type="Self.instrument" Multiplicity="0..1" />
+          <End Role="FRA" Type="Self.FRA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="instrument">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="FRA">
+              <PropertyRef Name="Instrument_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__LegalEnti__Addre__2E1BDC42">
+          <End Role="Address" Type="Self.Address" Multiplicity="0..1" />
+          <End Role="LegalEntity" Type="Self.LegalEntity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Address">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="LegalEntity">
+              <PropertyRef Name="Address_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Options__Instrum__3E52440B">
+          <End Role="instrument" Type="Self.instrument" Multiplicity="0..1" />
+          <End Role="Options" Type="Self.Options" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="instrument">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Options">
+              <PropertyRef Name="Instrument_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Options__Underly__3F466844">
+          <End Role="instrument" Type="Self.instrument" Multiplicity="0..1" />
+          <End Role="Options" Type="Self.Options" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="instrument">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Options">
+              <PropertyRef Name="Underlying_Instrument" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Trade__Counter_P__3A81B327">
+          <End Role="LegalEntity" Type="Self.LegalEntity" Multiplicity="0..1" />
+          <End Role="Trade" Type="Self.Trade" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LegalEntity">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Trade">
+              <PropertyRef Name="Counter_Party" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Trade__Instrumen__3B75D760">
+          <End Role="instrument" Type="Self.instrument" Multiplicity="0..1" />
+          <End Role="Trade" Type="Self.Trade" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="instrument">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Trade">
+              <PropertyRef Name="Instrument_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Trade__Party__398D8EEE">
+          <End Role="LegalEntity" Type="Self.LegalEntity" Multiplicity="0..1" />
+          <End Role="Trade" Type="Self.Trade" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LegalEntity">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Trade">
+              <PropertyRef Name="Party" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="TradingDatabaseModelStoreContainer">
+          <EntitySet Name="Address" EntityType="Self.Address" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Bond" EntityType="Self.Bond" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FRA" EntityType="Self.FRA" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="instrument" EntityType="Self.instrument" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LegalEntity" EntityType="Self.LegalEntity" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Options" EntityType="Self.Options" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Trade" EntityType="Self.Trade" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Bond__Instrument__32E0915F" Association="Self.FK__Bond__Instrument__32E0915F">
+            <End Role="instrument" EntitySet="instrument" />
+            <End Role="Bond" EntitySet="Bond" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Bond__Issuer__33D4B598" Association="Self.FK__Bond__Issuer__33D4B598">
+            <End Role="LegalEntity" EntitySet="LegalEntity" />
+            <End Role="Bond" EntitySet="Bond" />
+          </AssociationSet>
+          <AssociationSet Name="FK__FRA__Instrument___36B12243" Association="Self.FK__FRA__Instrument___36B12243">
+            <End Role="instrument" EntitySet="instrument" />
+            <End Role="FRA" EntitySet="FRA" />
+          </AssociationSet>
+          <AssociationSet Name="FK__LegalEnti__Addre__2E1BDC42" Association="Self.FK__LegalEnti__Addre__2E1BDC42">
+            <End Role="Address" EntitySet="Address" />
+            <End Role="LegalEntity" EntitySet="LegalEntity" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Options__Instrum__3E52440B" Association="Self.FK__Options__Instrum__3E52440B">
+            <End Role="instrument" EntitySet="instrument" />
+            <End Role="Options" EntitySet="Options" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Options__Underly__3F466844" Association="Self.FK__Options__Underly__3F466844">
+            <End Role="instrument" EntitySet="instrument" />
+            <End Role="Options" EntitySet="Options" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Trade__Counter_P__3A81B327" Association="Self.FK__Trade__Counter_P__3A81B327">
+            <End Role="LegalEntity" EntitySet="LegalEntity" />
+            <End Role="Trade" EntitySet="Trade" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Trade__Instrumen__3B75D760" Association="Self.FK__Trade__Instrumen__3B75D760">
+            <End Role="instrument" EntitySet="instrument" />
+            <End Role="Trade" EntitySet="Trade" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Trade__Party__398D8EEE" Association="Self.FK__Trade__Party__398D8EEE">
+            <End Role="LegalEntity" EntitySet="LegalEntity" />
+            <End Role="Trade" EntitySet="Trade" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="TradingDatabaseModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Address">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Line_1" Type="String" MaxLength="30" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="Line_2" Type="String" MaxLength="30" FixedLength="true" Unicode="false" />
+          <Property Name="Line_3" Type="String" MaxLength="30" FixedLength="true" Unicode="false" />
+          <Property Name="City" Type="String" MaxLength="15" FixedLength="true" Unicode="false" />
+          <Property Name="Country" Type="String" MaxLength="15" FixedLength="true" Unicode="false" />
+          <Property Name="Postcode" Type="String" MaxLength="15" FixedLength="true" Unicode="false" />
+          <NavigationProperty Name="LegalEntities" Relationship="Self.FK__LegalEnti__Addre__2E1BDC42" FromRole="Address" ToRole="LegalEntity" />
+        </EntityType>
+        <EntityType Name="Bond">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Instrument_ID" Type="Int32" />
+          <Property Name="Issuer" Type="Int32" />
+          <Property Name="Coupon" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="Issue_Year" Type="Int32" />
+          <Property Name="Issue_Month" Type="Int32" />
+          <Property Name="Duration" Type="Int32" />
+          <NavigationProperty Name="instrument" Relationship="Self.FK__Bond__Instrument__32E0915F" FromRole="Bond" ToRole="instrument" />
+          <NavigationProperty Name="LegalEntity" Relationship="Self.FK__Bond__Issuer__33D4B598" FromRole="Bond" ToRole="LegalEntity" />
+        </EntityType>
+        <EntityType Name="FRA">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Instrument_ID" Type="Int32" />
+          <Property Name="Rate" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="Duration" Type="Int32" />
+          <Property Name="Start_Month" Type="Int32" />
+          <Property Name="Start_Year" Type="Int32" />
+          <NavigationProperty Name="instrument" Relationship="Self.FK__FRA__Instrument___36B12243" FromRole="FRA" ToRole="instrument" />
+        </EntityType>
+        <EntityType Name="instrument">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ISIN" Type="String" MaxLength="30" FixedLength="true" Unicode="false" />
+          <NavigationProperty Name="Bonds" Relationship="Self.FK__Bond__Instrument__32E0915F" FromRole="instrument" ToRole="Bond" />
+          <NavigationProperty Name="FRAs" Relationship="Self.FK__FRA__Instrument___36B12243" FromRole="instrument" ToRole="FRA" />
+          <NavigationProperty Name="Options" Relationship="Self.FK__Options__Instrum__3E52440B" FromRole="instrument" ToRole="Options" />
+          <NavigationProperty Name="Options1" Relationship="Self.FK__Options__Underly__3F466844" FromRole="instrument" ToRole="Options" />
+          <NavigationProperty Name="Trades" Relationship="Self.FK__Trade__Instrumen__3B75D760" FromRole="instrument" ToRole="Trade" />
+        </EntityType>
+        <EntityType Name="LegalEntity">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="30" FixedLength="true" Unicode="false" />
+          <Property Name="Address_ID" Type="Int32" />
+          <NavigationProperty Name="Address" Relationship="Self.FK__LegalEnti__Addre__2E1BDC42" FromRole="LegalEntity" ToRole="Address" />
+          <NavigationProperty Name="Bonds" Relationship="Self.FK__Bond__Issuer__33D4B598" FromRole="LegalEntity" ToRole="Bond" />
+          <NavigationProperty Name="Trades" Relationship="Self.FK__Trade__Counter_P__3A81B327" FromRole="LegalEntity" ToRole="Trade" />
+          <NavigationProperty Name="Trades1" Relationship="Self.FK__Trade__Party__398D8EEE" FromRole="LegalEntity" ToRole="Trade" />
+        </EntityType>
+        <EntityType Name="Option">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Instrument_ID" Type="Int32" />
+          <Property Name="Underlying_Instrument" Type="Int32" />
+          <Property Name="Strike" Type="Decimal" Precision="18" Scale="0" />
+          <NavigationProperty Name="instrument" Relationship="Self.FK__Options__Instrum__3E52440B" FromRole="Options" ToRole="instrument" />
+          <NavigationProperty Name="instrument1" Relationship="Self.FK__Options__Underly__3F466844" FromRole="Options" ToRole="instrument" />
+        </EntityType>
+        <EntityType Name="Trade">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Party" Type="Int32" />
+          <Property Name="Counter_Party" Type="Int32" />
+          <Property Name="Instrument_ID" Type="Int32" />
+          <NavigationProperty Name="instrument" Relationship="Self.FK__Trade__Instrumen__3B75D760" FromRole="Trade" ToRole="instrument" />
+          <NavigationProperty Name="LegalEntity" Relationship="Self.FK__Trade__Counter_P__3A81B327" FromRole="Trade" ToRole="LegalEntity" />
+          <NavigationProperty Name="LegalEntity1" Relationship="Self.FK__Trade__Party__398D8EEE" FromRole="Trade" ToRole="LegalEntity" />
+        </EntityType>
+        <Association Name="FK__LegalEnti__Addre__2E1BDC42">
+          <End Role="Address" Type="Self.Address" Multiplicity="0..1" />
+          <End Role="LegalEntity" Type="Self.LegalEntity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Address">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="LegalEntity">
+              <PropertyRef Name="Address_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Bond__Instrument__32E0915F">
+          <End Role="instrument" Type="Self.instrument" Multiplicity="0..1" />
+          <End Role="Bond" Type="Self.Bond" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="instrument">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Bond">
+              <PropertyRef Name="Instrument_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Bond__Issuer__33D4B598">
+          <End Role="LegalEntity" Type="Self.LegalEntity" Multiplicity="0..1" />
+          <End Role="Bond" Type="Self.Bond" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LegalEntity">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Bond">
+              <PropertyRef Name="Issuer" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__FRA__Instrument___36B12243">
+          <End Role="instrument" Type="Self.instrument" Multiplicity="0..1" />
+          <End Role="FRA" Type="Self.FRA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="instrument">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="FRA">
+              <PropertyRef Name="Instrument_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Options__Instrum__3E52440B">
+          <End Role="instrument" Type="Self.instrument" Multiplicity="0..1" />
+          <End Role="Options" Type="Self.Option" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="instrument">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Options">
+              <PropertyRef Name="Instrument_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Options__Underly__3F466844">
+          <End Role="instrument" Type="Self.instrument" Multiplicity="0..1" />
+          <End Role="Options" Type="Self.Option" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="instrument">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Options">
+              <PropertyRef Name="Underlying_Instrument" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Trade__Instrumen__3B75D760">
+          <End Role="instrument" Type="Self.instrument" Multiplicity="0..1" />
+          <End Role="Trade" Type="Self.Trade" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="instrument">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Trade">
+              <PropertyRef Name="Instrument_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Trade__Counter_P__3A81B327">
+          <End Role="LegalEntity" Type="Self.LegalEntity" Multiplicity="0..1" />
+          <End Role="Trade" Type="Self.Trade" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LegalEntity">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Trade">
+              <PropertyRef Name="Counter_Party" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Trade__Party__398D8EEE">
+          <End Role="LegalEntity" Type="Self.LegalEntity" Multiplicity="0..1" />
+          <End Role="Trade" Type="Self.Trade" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LegalEntity">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Trade">
+              <PropertyRef Name="Party" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="TradingDatabaseEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Addresses" EntityType="Self.Address" />
+          <EntitySet Name="Bonds" EntityType="Self.Bond" />
+          <EntitySet Name="FRAs" EntityType="Self.FRA" />
+          <EntitySet Name="instruments" EntityType="Self.instrument" />
+          <EntitySet Name="LegalEntities" EntityType="Self.LegalEntity" />
+          <EntitySet Name="Options" EntityType="Self.Option" />
+          <EntitySet Name="Trades" EntityType="Self.Trade" />
+          <AssociationSet Name="FK__LegalEnti__Addre__2E1BDC42" Association="Self.FK__LegalEnti__Addre__2E1BDC42">
+            <End Role="Address" EntitySet="Addresses" />
+            <End Role="LegalEntity" EntitySet="LegalEntities" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Bond__Instrument__32E0915F" Association="Self.FK__Bond__Instrument__32E0915F">
+            <End Role="instrument" EntitySet="instruments" />
+            <End Role="Bond" EntitySet="Bonds" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Bond__Issuer__33D4B598" Association="Self.FK__Bond__Issuer__33D4B598">
+            <End Role="LegalEntity" EntitySet="LegalEntities" />
+            <End Role="Bond" EntitySet="Bonds" />
+          </AssociationSet>
+          <AssociationSet Name="FK__FRA__Instrument___36B12243" Association="Self.FK__FRA__Instrument___36B12243">
+            <End Role="instrument" EntitySet="instruments" />
+            <End Role="FRA" EntitySet="FRAs" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Options__Instrum__3E52440B" Association="Self.FK__Options__Instrum__3E52440B">
+            <End Role="instrument" EntitySet="instruments" />
+            <End Role="Options" EntitySet="Options" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Options__Underly__3F466844" Association="Self.FK__Options__Underly__3F466844">
+            <End Role="instrument" EntitySet="instruments" />
+            <End Role="Options" EntitySet="Options" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Trade__Instrumen__3B75D760" Association="Self.FK__Trade__Instrumen__3B75D760">
+            <End Role="instrument" EntitySet="instruments" />
+            <End Role="Trade" EntitySet="Trades" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Trade__Counter_P__3A81B327" Association="Self.FK__Trade__Counter_P__3A81B327">
+            <End Role="LegalEntity" EntitySet="LegalEntities" />
+            <End Role="Trade" EntitySet="Trades" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Trade__Party__398D8EEE" Association="Self.FK__Trade__Party__398D8EEE">
+            <End Role="LegalEntity" EntitySet="LegalEntities" />
+            <End Role="Trade" EntitySet="Trades" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="TradingDatabaseModelStoreContainer" CdmEntityContainer="TradingDatabaseEntities">
+          <EntitySetMapping Name="Addresses">
+            <EntityTypeMapping TypeName="TradingDatabaseModel.Address">
+              <MappingFragment StoreEntitySet="Address">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Line_1" ColumnName="Line 1" />
+                <ScalarProperty Name="Line_2" ColumnName="Line 2" />
+                <ScalarProperty Name="Line_3" ColumnName="Line 3" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="Postcode" ColumnName="Postcode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Bonds">
+            <EntityTypeMapping TypeName="TradingDatabaseModel.Bond">
+              <MappingFragment StoreEntitySet="Bond">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Instrument_ID" ColumnName="Instrument_ID" />
+                <ScalarProperty Name="Issuer" ColumnName="Issuer" />
+                <ScalarProperty Name="Coupon" ColumnName="Coupon" />
+                <ScalarProperty Name="Issue_Year" ColumnName="Issue_Year" />
+                <ScalarProperty Name="Issue_Month" ColumnName="Issue_Month" />
+                <ScalarProperty Name="Duration" ColumnName="Duration" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FRAs">
+            <EntityTypeMapping TypeName="TradingDatabaseModel.FRA">
+              <MappingFragment StoreEntitySet="FRA">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Instrument_ID" ColumnName="Instrument_ID" />
+                <ScalarProperty Name="Rate" ColumnName="Rate" />
+                <ScalarProperty Name="Duration" ColumnName="Duration" />
+                <ScalarProperty Name="Start_Month" ColumnName="Start_Month" />
+                <ScalarProperty Name="Start_Year" ColumnName="Start_Year" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="instruments">
+            <EntityTypeMapping TypeName="TradingDatabaseModel.instrument">
+              <MappingFragment StoreEntitySet="instrument">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ISIN" ColumnName="ISIN" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LegalEntities">
+            <EntityTypeMapping TypeName="TradingDatabaseModel.LegalEntity">
+              <MappingFragment StoreEntitySet="LegalEntity">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Address_ID" ColumnName="Address_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Options">
+            <EntityTypeMapping TypeName="TradingDatabaseModel.Option">
+              <MappingFragment StoreEntitySet="Options">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Instrument_ID" ColumnName="Instrument_ID" />
+                <ScalarProperty Name="Underlying_Instrument" ColumnName="Underlying_Instrument" />
+                <ScalarProperty Name="Strike" ColumnName="Strike" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Trades">
+            <EntityTypeMapping TypeName="TradingDatabaseModel.Trade">
+              <MappingFragment StoreEntitySet="Trade">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Party" ColumnName="Party" />
+                <ScalarProperty Name="Counter_Party" ColumnName="Counter_Party" />
+                <ScalarProperty Name="Instrument_ID" ColumnName="Instrument_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="b8d6a3d8f4b64828beb9da90f29ed76f" Name="Diagram1">
+        <EntityTypeShape EntityType="TradingDatabaseModel.Address" Width="1.5" PointX="1.5" PointY="15.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="TradingDatabaseModel.Bond" Width="1.5" PointX="3" PointY="4" IsExpanded="true" />
+        <EntityTypeShape EntityType="TradingDatabaseModel.FRA" Width="1.5" PointX="3" PointY="8.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="TradingDatabaseModel.instrument" Width="1.5" PointX="0.75" PointY="6.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="TradingDatabaseModel.LegalEntity" Width="1.5" PointX="0.75" PointY="2.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="TradingDatabaseModel.Option" Width="1.5" PointX="3" PointY="11.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="TradingDatabaseModel.Trade" Width="1.5" PointX="6" PointY="6.25" IsExpanded="true" />
+        <AssociationConnector Association="TradingDatabaseModel.FK__LegalEnti__Addre__2E1BDC42" ManuallyRouted="false" />
+        <AssociationConnector Association="TradingDatabaseModel.FK__Bond__Instrument__32E0915F" ManuallyRouted="false" />
+        <AssociationConnector Association="TradingDatabaseModel.FK__Bond__Issuer__33D4B598" ManuallyRouted="false" />
+        <AssociationConnector Association="TradingDatabaseModel.FK__FRA__Instrument___36B12243" ManuallyRouted="false" />
+        <AssociationConnector Association="TradingDatabaseModel.FK__Options__Instrum__3E52440B" ManuallyRouted="false" />
+        <AssociationConnector Association="TradingDatabaseModel.FK__Options__Underly__3F466844" ManuallyRouted="false" />
+        <AssociationConnector Association="TradingDatabaseModel.FK__Trade__Instrumen__3B75D760" ManuallyRouted="false" />
+        <AssociationConnector Association="TradingDatabaseModel.FK__Trade__Counter_P__3A81B327" ManuallyRouted="false" />
+        <AssociationConnector Association="TradingDatabaseModel.FK__Trade__Party__398D8EEE" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
